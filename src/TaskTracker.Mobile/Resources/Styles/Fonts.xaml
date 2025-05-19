@@ -1,0 +1,3 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui">
+    <FontFamily x:Key="FontTech">Exo2-Variable.ttf#Exo 2</FontFamily>
+</ResourceDictionary>

@@ -1,0 +1,6 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui">
+    <Color x:Key="PrimaryDark">#10141F</Color>
+    <Color x:Key="PrimaryDarker">#1B2231</Color>
+    <Color x:Key="AccentBlue">#27C4FF</Color>
+    <Color x:Key="HighlightOrange">#FFB244</Color>
+</ResourceDictionary>
