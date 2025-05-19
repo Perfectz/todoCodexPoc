@@ -32,11 +32,11 @@ public class MainPageViewModel : INotifyPropertyChanged
         AddTaskCommand = new Command(async () => await AddTaskAsync());
         ToggleDoneCommand = new Command<TodoItem>(async item => await ToggleDoneAsync(item));
         DeleteTaskCommand = new Command<TodoItem>(async item => await DeleteTaskAsync(item));
-        _repo.TasksChanged += OnTasksChanged;
+        _repo.TasksChanged += async (s, e) => await OnTasksChanged(s, e);
         _ = LoadAsync();
     }
 
-    private async void OnTasksChanged(object? sender, EventArgs e)
+    private async Task OnTasksChanged(object? sender, EventArgs e)
     {
         await LoadAsync();
     }

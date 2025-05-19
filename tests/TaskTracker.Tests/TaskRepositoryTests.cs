@@ -14,7 +14,7 @@ public class TaskRepositoryTests
     {
         // Arrange
         var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".json");
-        var repo = new FileTodoRepository(path);
+        using var repo = new FileTodoRepository(path);
         var item = new TodoItem
         {
             Id = Guid.NewGuid(),

@@ -13,7 +13,7 @@ internal class Program
             return;
         }
 
-        ITodoRepository repo = new FileTodoRepository();
+        using ITodoRepository repo = new FileTodoRepository();
 
         if (args.Length > 0 && args[0].Equals("add", StringComparison.OrdinalIgnoreCase))
         {
