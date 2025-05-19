@@ -1,14 +1,5 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    <LinearGradientBrush x:Key="PrimarySurface">
-        <GradientStop Color="{StaticResource PrimaryDark}" Offset="0" />
-        <GradientStop Color="{StaticResource PrimaryDarker}" Offset="1" />
-<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui">
-    <LinearGradientBrush x:Key="PrimarySurface">
-        <GradientStop Color="{StaticResource PrimaryDark}" Offset="0" />
-        <GradientStop Color="{StaticResource PrimaryDarker}" Offset="1" />
-<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <LinearGradientBrush x:Key="PrimarySurface" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="{StaticResource PrimaryDark}" Offset="0.0" />
         <GradientStop Color="{StaticResource PrimaryDarker}" Offset="1.0" />
