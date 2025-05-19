@@ -8,10 +8,11 @@ This repo demonstrates a simple .NET console and MAUI application with an Entity
 
 ## Building and running
 
-Build and run the console project locally with:
+Build and run the console app locally with:
 
 ```bash
-dotnet run --project TaskTracker.csproj [verb] [arguments]
+dotnet restore
+dotnet run --project src/TaskTracker.Cli/TaskTracker.csproj [verb] [arguments]
 ```
 
 Running with no verb lists all tasks.
@@ -26,6 +27,7 @@ Running with no verb lists all tasks.
 The tests live under `tests/TaskTracker.Tests`. Execute them locally with:
 
 ```bash
+dotnet restore
 dotnet test
 ```
 
@@ -34,7 +36,7 @@ dotnet test
 The MAUI app relies on Entity Framework Core. After installing the SDK you can create the initial database and schema with:
 
 ```bash
-cd TodoMauiApp
+cd src/TaskTracker.Mobile
 dotnet ef migrations add Init
 dotnet ef database update
 ```
@@ -47,6 +49,19 @@ The container environment lacks the .NET SDK and has no network access. Any `dot
 
 The MAUI project lives in `src/TaskTracker.Mobile`.
 
+## Project layout
+
+```
+src/
+  TaskTracker.Core/   # shared domain models and services
+  TaskTracker.Cli/    # console interface
+  TaskTracker.Mobile/ # MAUI mobile app
+tests/
+  TaskTracker.Tests/  # xUnit tests
+```
+
+Open `TodoCodexPoc.sln` in your IDE to work with all projects at once.
+
 ### Local prerequisites
 
 - Install the .NET 8 SDK and the MAUI workloads.
@@ -56,6 +71,7 @@ The MAUI project lives in `src/TaskTracker.Mobile`.
 Build the Android project with:
 
 ```bash
+dotnet restore src/TaskTracker.Mobile/TaskTracker.Mobile.csproj
 dotnet build src/TaskTracker.Mobile/TaskTracker.Mobile.csproj -f net8.0-android
 ```
 
@@ -66,6 +82,7 @@ Install the resulting APK on a device or emulator using `adb install`.
 Build for iOS with:
 
 ```bash
+dotnet restore src/TaskTracker.Mobile/TaskTracker.Mobile.csproj
 dotnet build src/TaskTracker.Mobile/TaskTracker.Mobile.csproj -f net8.0-ios
 ```
 

@@ -7,6 +7,7 @@ This repository contains a small .NET application along with unit tests.
 The tests require the .NET SDK. Execute the following command from the repository root:
 
 ```bash
+dotnet restore
 dotnet test
 ```
 
