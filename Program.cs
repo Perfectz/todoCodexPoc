@@ -3,8 +3,16 @@ using TodoCodexPoc.Services;
 
 internal class Program
 {
-    private static async Task Main()
+    private static async Task Main(string[] args)
     {
+        if (args.Length > 0 && args[0].Equals("voice", StringComparison.OrdinalIgnoreCase))
+        {
+            IVoiceToText voiceService = new DummyVoiceToText();
+            var text = await voiceService.TranscribeAsync();
+            Console.WriteLine(text);
+            return;
+        }
+
         ITodoRepository repo = new FileTodoRepository();
         var items = await repo.GetAllAsync();
 
