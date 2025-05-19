@@ -9,6 +9,6 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\TaskTracker.csproj" />
+    <ProjectReference Include="..\..\src\TaskTracker.Core\TaskTracker.Core.csproj" />
   </ItemGroup>
 </Project>
