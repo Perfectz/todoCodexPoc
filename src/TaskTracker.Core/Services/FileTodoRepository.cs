@@ -4,7 +4,7 @@ using TodoCodexPoc.Models;
 
 namespace TodoCodexPoc.Services;
 
-public class FileTodoRepository : ITodoRepository
+public class FileTodoRepository : ITodoRepository, IDisposable
 {
     private readonly string _filePath;
     private readonly SemaphoreSlim _mutex = new(1, 1);
@@ -155,5 +155,11 @@ public class FileTodoRepository : ITodoRepository
     {
         _items = null;
         TasksChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void Dispose()
+    {
+        _watcher.Dispose();
+        _mutex.Dispose();
     }
 }

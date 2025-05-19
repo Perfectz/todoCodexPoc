@@ -11,7 +11,6 @@ public partial class MainPage : ContentPage
     {
         InitializeComponent();
         BindingContext = viewModel;
-        TaskList.ItemAppearing += OnItemAppearing;
     }
 
     private void OnCheckBoxChanged(object sender, CheckedChangedEventArgs e)
@@ -22,15 +21,5 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private async void OnItemAppearing(object? sender, ItemVisibilityEventArgs e)
-    {
-        if (e.Item is ViewCell v)
-        {
-            v.Opacity = 0;
-            v.TranslationX = 20;
-            await Task.WhenAll(
-                v.FadeTo(1, 200, Easing.CubicOut),
-                v.TranslateTo(0, 0, 200, Easing.CubicOut));
-        }
-    }
+    // Removed invalid item animation handler that assumed ViewCell containers
 }
