@@ -42,3 +42,31 @@ dotnet ef database update
 ## Why no `dotnet` commands in container prompts?
 
 The container environment lacks the .NET SDK and has no network access. Any `dotnet` commands will fail here, so migrations and tests must be executed on a machine where the SDK is available.
+
+## Building the mobile app
+
+The MAUI project lives in `src/TaskTracker.Mobile`.
+
+### Local prerequisites
+
+- Install the .NET 8 SDK and the MAUI workloads.
+
+### Android
+
+Build the Android project with:
+
+```bash
+dotnet build src/TaskTracker.Mobile/TaskTracker.Mobile.csproj -f net8.0-android
+```
+
+Install the resulting APK on a device or emulator using `adb install`.
+
+### iOS
+
+Build for iOS with:
+
+```bash
+dotnet build src/TaskTracker.Mobile/TaskTracker.Mobile.csproj -f net8.0-ios
+```
+
+Run the app through Xcode on a simulator or connected device.
