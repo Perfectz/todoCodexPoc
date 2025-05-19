@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.IO;
 using TodoCodexPoc.Models;
 
 namespace TodoCodexPoc.Services;
@@ -7,11 +8,24 @@ public class FileTodoRepository : ITodoRepository
 {
     private readonly string _filePath;
     private readonly SemaphoreSlim _mutex = new(1, 1);
+    private readonly FileSystemWatcher _watcher;
     private List<TodoItem>? _items;
+
+    public event EventHandler? TasksChanged;
 
     public FileTodoRepository(string? filePath = null)
     {
         _filePath = filePath ?? Path.Combine(".", "data", "tasks.json");
+        var directory = Path.GetDirectoryName(_filePath)!;
+        var filename = Path.GetFileName(_filePath);
+        _watcher = new FileSystemWatcher(directory, filename)
+        {
+            NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.FileName
+        };
+        _watcher.Changed += OnFileChanged;
+        _watcher.Created += OnFileChanged;
+        _watcher.Deleted += OnFileChanged;
+        _watcher.EnableRaisingEvents = true;
     }
 
     private async Task<List<TodoItem>> LoadAsync()
@@ -33,7 +47,7 @@ public class FileTodoRepository : ITodoRepository
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
                 _items = new List<TodoItem>();
-                await SaveInternalAsync();
+                await SaveAsync();
             }
             else
             {
@@ -49,11 +63,12 @@ public class FileTodoRepository : ITodoRepository
         return _items;
     }
 
-    private async Task SaveInternalAsync()
+    private async Task SaveAsync()
     {
         Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
         using FileStream stream = File.Create(_filePath);
         await JsonSerializer.SerializeAsync(stream, _items, new JsonSerializerOptions { WriteIndented = true });
+        TasksChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public async Task<IReadOnlyList<TodoItem>> GetAllAsync(CancellationToken token = default)
@@ -75,7 +90,7 @@ public class FileTodoRepository : ITodoRepository
         try
         {
             list.Add(item);
-            await SaveInternalAsync();
+            await SaveAsync();
         }
         finally
         {
@@ -94,7 +109,7 @@ public class FileTodoRepository : ITodoRepository
             {
                 list[index] = item;
             }
-            await SaveInternalAsync();
+            await SaveAsync();
         }
         finally
         {
@@ -109,11 +124,36 @@ public class FileTodoRepository : ITodoRepository
         try
         {
             list.RemoveAll(t => t.Id == id);
-            await SaveInternalAsync();
+            await SaveAsync();
         }
         finally
         {
             _mutex.Release();
         }
+    }
+
+    public async Task ToggleAsync(Guid id, CancellationToken token = default)
+    {
+        var list = await LoadAsync();
+        await _mutex.WaitAsync(token);
+        try
+        {
+            var index = list.FindIndex(t => t.Id == id);
+            if (index >= 0)
+            {
+                list[index].IsDone = !list[index].IsDone;
+                await SaveAsync();
+            }
+        }
+        finally
+        {
+            _mutex.Release();
+        }
+    }
+
+    private void OnFileChanged(object? sender, FileSystemEventArgs e)
+    {
+        _items = null;
+        TasksChanged?.Invoke(this, EventArgs.Empty);
     }
 }
