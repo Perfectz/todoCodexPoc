@@ -11,7 +11,13 @@ public static class MauiProgram
     public static MauiApp Create()
     {
         var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>();
+
         builder.Services.AddSingleton<ITodoRepository, FileTodoRepository>();
+        builder.Services.AddTransient<ViewModels.MainPageViewModel>();
+        builder.Services.AddTransient<Views.MainPage>();
+
         return builder.Build();
     }
 }

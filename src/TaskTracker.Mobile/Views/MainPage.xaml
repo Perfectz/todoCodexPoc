@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TaskTracker.Mobile.ViewModels"
+             x:Class="TaskTracker.Mobile.Views.MainPage">
+    <VerticalStackLayout Padding="20" Spacing="10">
+        <HorizontalStackLayout Spacing="10">
+            <Entry Text="{Binding NewTaskText}" Placeholder="New task" HorizontalOptions="FillAndExpand" />
+            <Button Text="Add" Command="{Binding AddTaskCommand}" />
+        </HorizontalStackLayout>
+        <CollectionView x:Name="TaskList" ItemsSource="{Binding Tasks}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Delete"
+                                           BackgroundColor="Red"
+                                           Command="{Binding BindingContext.DeleteTaskCommand, Source={x:Reference TaskList}}"
+                                           CommandParameter="{Binding .}" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <Grid Padding="5" ColumnDefinitions="Auto,*" VerticalOptions="Center">
+                            <CheckBox IsChecked="{Binding IsDone}" CheckedChanged="OnCheckBoxChanged" />
+                            <Label Text="{Binding Title}" Grid.Column="1" VerticalOptions="Center" />
+                        </Grid>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>
