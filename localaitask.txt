@@ -1,0 +1,13 @@
+# Commands for the local AI to install dependencies
+# These steps assume offline packages for .NET SDK 8.0 are available.
+
+# 1. Copy the .NET SDK 8.0 installation files into the container, e.g. under /tmp/dotnet.
+# 2. Install the packages. For Debian based systems it may look like:
+# sudo dpkg -i /tmp/dotnet/*.deb
+# 3. Verify the installation:
+# dotnet --version
+
+# Once the SDK is installed you can run:
+# dotnet restore
+# dotnet build
+# dotnet test

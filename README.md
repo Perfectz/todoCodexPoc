@@ -1,15 +1,44 @@
 # todoCodexPoc
 
-This repo demonstrates a simple .NET MAUI application with an Entity Framework Core SQLite backend.
+This repo demonstrates a simple .NET console and MAUI application with an Entity Framework Core SQLite backend.
+
+## Local prerequisites
+
+- .NET SDK 8.0 installed locally. The container used in Codex testing does not include the SDK and has no internet access.
+
+## Building and running
+
+Build and run the console project locally with:
+
+```bash
+dotnet run --project TaskTracker.csproj [verb] [arguments]
+```
+
+Running with no verb lists all tasks.
+
+### CLI verbs
+
+- `add "task description"` &ndash; add a new task. Natural language due dates are parsed automatically.
+- `voice` &ndash; transcribe speech using `IVoiceToText` and create a task from the result.
+
+## Running tests
+
+The tests live under `tests/TaskTracker.Tests`. Execute them locally with:
+
+```bash
+dotnet test
+```
 
 ## EF Core migrations
 
-The `dotnet` CLI is required to run EF Core commands. If `dotnet` is installed, you can create the initial database with:
+The MAUI app relies on Entity Framework Core. After installing the SDK you can create the initial database and schema with:
 
 ```bash
 cd TodoMauiApp
- dotnet ef migrations add Init
- dotnet ef database update
+dotnet ef migrations add Init
+dotnet ef database update
 ```
 
-In the Codex test environment `dotnet` is not available, so these commands fail. They will work on a local machine that has the .NET SDK installed.
+## Why no `dotnet` commands in container prompts?
+
+The container environment lacks the .NET SDK and has no network access. Any `dotnet` commands will fail here, so migrations and tests must be executed on a machine where the SDK is available.
