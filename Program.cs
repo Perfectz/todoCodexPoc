@@ -14,6 +14,31 @@ internal class Program
         }
 
         ITodoRepository repo = new FileTodoRepository();
+
+        if (args.Length > 0 && args[0].Equals("add", StringComparison.OrdinalIgnoreCase))
+        {
+            if (args.Length < 2)
+            {
+                Console.WriteLine("Usage: add \"task description\"");
+                return;
+            }
+
+            string text = string.Join(' ', args.Skip(1));
+            DateTimeOffset? due = TextDateParser.Parse(ref text);
+
+            var item = new TodoItem
+            {
+                Id = Guid.NewGuid(),
+                Title = text,
+                DueDate = due,
+                Priority = 1,
+                IsDone = false
+            };
+            await repo.AddAsync(item);
+            Console.WriteLine($"Added task: {item.Title} {(item.DueDate.HasValue ? item.DueDate.Value.ToString() : string.Empty)}");
+            return;
+        }
+
         var items = await repo.GetAllAsync();
 
         if (!items.Any())
