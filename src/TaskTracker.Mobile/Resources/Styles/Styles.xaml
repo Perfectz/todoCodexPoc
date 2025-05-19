@@ -1,0 +1,26 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui">
+    <Style x:Key="CardStyle" TargetType="Frame">
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Background" Value="{StaticResource PrimarySurface}" />
+        <Setter Property="BorderStroke" Value="{StaticResource Accent}" />
+        <Setter Property="BorderStrokeThickness" Value="1" />
+        <Setter Property="HasShadow" Value="True" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="{StaticResource Accent}" Opacity="0.3" Radius="10" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Scale" Value="0.96" />
+                            <Setter Property="BackgroundColor" Value="#1A27C4FF" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+</ResourceDictionary>

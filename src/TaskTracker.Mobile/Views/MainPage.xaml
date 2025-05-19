@@ -16,6 +16,7 @@
                             <CheckBox IsChecked="{Binding IsDone}" />
                             <VerticalStackLayout Grid.Column="1" Spacing="2">
                                 <Label Text="{Binding Title}" FontFamily="{StaticResource FontTech}" TextColor="White" />
+                                <Label Text="{Binding DueDate, StringFormat='Due {0:g}'}" FontSize="12" TextColor="#90FFFFFF" />
                                 <Label Text="{Binding DueDate, StringFormat='Due {0:g}'}" FontSize="12" TextColor="#90FFFFFF"/>
                             </VerticalStackLayout>
                         </Grid>

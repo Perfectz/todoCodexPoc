@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:TaskTracker.Mobile.Views"
+       x:Class="TaskTracker.Mobile.AppShell">
+    <TabBar BackgroundColor="{StaticResource PrimaryDarker}" ForegroundColor="White">
+        <ShellContent Title="Tasks" ContentTemplate="{DataTemplate views:MainPage}" />
+        <ShellContent Title="Stats">
+            <ContentPage />
+        </ShellContent>
+        <ShellContent Title="Settings">
+            <ContentPage />
+        </ShellContent>
+    </TabBar>
+</Shell>
