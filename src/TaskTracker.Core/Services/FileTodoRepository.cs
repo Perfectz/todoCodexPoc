@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.IO;
+using System.Linq;
 using TodoCodexPoc.Models;
 
 namespace TodoCodexPoc.Services;
@@ -93,7 +94,13 @@ public class FileTodoRepository : ITodoRepository, IDisposable
     public async Task<IReadOnlyList<TodoItem>> GetAllAsync(CancellationToken token = default)
     {
         var list = await LoadAsync();
-        return list.AsReadOnly();
+        return list.Where(t => !t.IsArchived).ToList().AsReadOnly();
+    }
+
+    public async Task<IReadOnlyList<TodoItem>> GetArchivedAsync(CancellationToken token = default)
+    {
+        var list = await LoadAsync();
+        return list.Where(t => t.IsArchived).ToList().AsReadOnly();
     }
 
     public async Task<TodoItem?> GetAsync(Guid id, CancellationToken token = default)
@@ -151,6 +158,25 @@ public class FileTodoRepository : ITodoRepository, IDisposable
         }
     }
 
+    public async Task ArchiveAsync(Guid id, CancellationToken token = default)
+    {
+        await _mutex.WaitAsync(token);
+        try
+        {
+            await LoadAsync();
+            var index = _items!.FindIndex(t => t.Id == id);
+            if (index >= 0)
+            {
+                _items![index].IsArchived = true;
+                await SaveAsync();
+            }
+        }
+        finally
+        {
+            _mutex.Release();
+        }
+    }
+
     public async Task ToggleAsync(Guid id, CancellationToken token = default)
     {
         await _mutex.WaitAsync(token);
@@ -160,8 +186,11 @@ public class FileTodoRepository : ITodoRepository, IDisposable
             var index = _items!.FindIndex(t => t.Id == id);
             if (index >= 0)
             {
-                _items[index].IsDone = !_items[index].IsDone;
-                await SaveAsync();
+                if (!_items[index].IsArchived)
+                {
+                    _items[index].IsDone = !_items[index].IsDone;
+                    await SaveAsync();
+                }
             }
         }
         finally

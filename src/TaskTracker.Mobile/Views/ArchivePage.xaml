@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TaskTracker.Mobile.Views.ArchivePage">
+    <VerticalStackLayout Padding="20">
+        <CollectionView x:Name="ArchiveList" ItemsSource="{Binding ArchivedTasks}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Style="{StaticResource CardStyle}" Padding="12">
+                        <Label Text="{Binding Title}" TextColor="White" />
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

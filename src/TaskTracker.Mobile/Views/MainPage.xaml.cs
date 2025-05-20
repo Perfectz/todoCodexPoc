@@ -17,6 +17,7 @@ public partial class MainPage : ContentPage
     {
         if (sender is CheckBox cb && cb.BindingContext is TodoItem item && BindingContext is MainPageViewModel vm)
         {
+            item.IsDone = e.Value;
             vm.ToggleDoneCommand.Execute(item);
         }
     }

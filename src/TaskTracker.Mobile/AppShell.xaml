@@ -5,9 +5,7 @@
        x:Class="TaskTracker.Mobile.AppShell">
     <TabBar BackgroundColor="{StaticResource PrimaryDarker}" ForegroundColor="White">
         <ShellContent Title="Tasks" ContentTemplate="{DataTemplate views:MainPage}" />
-        <ShellContent Title="Stats">
-            <ContentPage />
-        </ShellContent>
+        <ShellContent Title="Archive" ContentTemplate="{DataTemplate views:ArchivePage}" />
         <ShellContent Title="Settings">
             <ContentPage />
         </ShellContent>
