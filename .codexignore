@@ -1,0 +1,42 @@
+# Build output directories
+**/bin/
+**/obj/
+**/out/
+
+# Package directories
+**/packages/
+**/node_modules/
+
+# .NET and Visual Studio files
+**/*.user
+**/*.suo
+**/.vs/
+
+# Temporary files
+**/temp/
+**/tmp/
+
+# Large files
+**/*.zip
+**/*.tar.gz
+**/*.nupkg
+
+# Android specific
+**/android/app/build/
+**/*.apk
+**/*.aab
+
+# iOS specific
+**/ios/build/
+**/*.ipa
+**/*.app.dSYM.zip
+
+# macOS specific
+**/*.DS_Store
+
+# Test files
+**/TestResults/
+**/coverage/
+
+# Logs
+**/*.log 
