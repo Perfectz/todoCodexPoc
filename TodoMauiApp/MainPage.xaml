@@ -9,8 +9,9 @@
 
     <Grid RowDefinitions="Auto,*,Auto" RowSpacing="16" Padding="20">
         <!-- Header -->
-        <Label Text="My Todo List" 
-               Style="{StaticResource HeaderLabel}" 
+        <Label Text="My Todo List"
+               Style="{StaticResource HeaderLabel}"
+               FontFamily="{StaticResource FontTech}"
                Grid.Row="0" />
         
         <!-- Todo List -->
@@ -35,14 +36,14 @@
                         <SwipeView>
                             <SwipeView.RightItems>
                                 <SwipeItems>
-                                    <SwipeItem Text="Delete" 
-                                               BackgroundColor="Red"
+                                    <SwipeItem Text="Delete"
+                                               BackgroundColor="{StaticResource AccentBlue}"
                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TodoListViewModel}}, Path=DeleteTodoCommand}"
                                                CommandParameter="{Binding}" />
                                 </SwipeItems>
                             </SwipeView.RightItems>
                             <Grid Padding="10">
-                                <Frame Padding="15">
+                                <Frame Style="{StaticResource CardStyle}" Padding="15">
                                     <Grid ColumnDefinitions="Auto,*">
                                         <CheckBox IsChecked="{Binding IsDone}"
                                                   Grid.Column="0"
@@ -50,8 +51,9 @@
                                                   CheckedChanged="OnCheckBoxChanged"
                                                   BindingContext="{Binding}" />
                                         <VerticalStackLayout Grid.Column="1" Spacing="4">
-                                            <Label Text="{Binding Title}" 
+                                            <Label Text="{Binding Title}"
                                                    FontSize="16"
+                                                   FontFamily="{StaticResource FontTech}"
                                                    TextDecorations="{Binding IsDone, Converter={StaticResource BoolToStrikethroughConverter}}" />
                                             <Label Text="{Binding DueDate, StringFormat='Due: {0:d}'}" 
                                                    FontSize="12" 
@@ -67,9 +69,9 @@
         </RefreshView>
 
         <!-- Add Task Section -->
-        <Grid ColumnDefinitions="*,Auto" Grid.Row="2" ColumnSpacing="10">
-            <Entry Placeholder="Enter new task..." 
-                   Text="{Binding NewTodoTitle}" 
+        <Grid ColumnDefinitions="*,Auto" Grid.Row="2" ColumnSpacing="10" Margin="0,10,0,0">
+            <Entry Placeholder="Enter new task..."
+                   Text="{Binding NewTodoTitle}"
                    ReturnCommand="{Binding AddTodoCommand}"
                    Grid.Column="0" />
             <Button Text="Add"
