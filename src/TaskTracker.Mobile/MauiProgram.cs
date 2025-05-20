@@ -19,6 +19,9 @@ public static class MauiProgram
         builder.Services.AddTransient<Views.MainPage>();
         builder.Services.AddTransient<Views.ArchivePage>();
 
-        return builder.Build();
+        var app = builder.Build();
+        ServiceHelper.Initialize(app.Services);
+
+        return app;
     }
 }
