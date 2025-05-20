@@ -1,9 +1,82 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TodoMauiApp.MainPage">
-    <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Center">
-        <Label Text="Welcome to .NET MAUI!" FontSize="32" HorizontalOptions="Center" />
-        <Button x:Name="CounterBtn" Text="Click me" Clicked="OnCounterClicked" />
-    </VerticalStackLayout>
+             xmlns:viewmodels="clr-namespace:TodoMauiApp.ViewModels"
+             xmlns:models="clr-namespace:TodoMauiApp.Models"
+             x:Class="TodoMauiApp.MainPage"
+             x:DataType="viewmodels:TodoListViewModel"
+             Title="Todo List">
+
+    <Grid RowDefinitions="Auto,*,Auto" RowSpacing="16" Padding="20">
+        <!-- Header -->
+        <Label Text="My Todo List" 
+               Style="{StaticResource HeaderLabel}" 
+               Grid.Row="0" />
+        
+        <!-- Todo List -->
+        <RefreshView Command="{Binding LoadTodosCommand}" 
+                     IsRefreshing="{Binding IsBusy}" 
+                     Grid.Row="1">
+            <CollectionView ItemsSource="{Binding Todos}"
+                           SelectedItem="{Binding SelectedTodo}">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="No tasks yet!" 
+                               FontSize="18" 
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="Add a task below to get started." 
+                               FontSize="14" 
+                               TextColor="{StaticResource SecondaryTextColor}"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:TodoItem">
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem Text="Delete" 
+                                               BackgroundColor="Red"
+                                               Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TodoListViewModel}}, Path=DeleteTodoCommand}"
+                                               CommandParameter="{Binding}" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Grid Padding="10">
+                                <Frame Padding="15">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <CheckBox IsChecked="{Binding IsDone}"
+                                                  Grid.Column="0"
+                                                  VerticalOptions="Center"
+                                                  CheckedChanged="OnCheckBoxChanged"
+                                                  BindingContext="{Binding}" />
+                                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                            <Label Text="{Binding Title}" 
+                                                   FontSize="16"
+                                                   TextDecorations="{Binding IsDone, Converter={StaticResource BoolToStrikethroughConverter}}" />
+                                            <Label Text="{Binding DueDate, StringFormat='Due: {0:d}'}" 
+                                                   FontSize="12" 
+                                                   TextColor="{StaticResource SecondaryTextColor}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Frame>
+                            </Grid>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <!-- Add Task Section -->
+        <Grid ColumnDefinitions="*,Auto" Grid.Row="2" ColumnSpacing="10">
+            <Entry Placeholder="Enter new task..." 
+                   Text="{Binding NewTodoTitle}" 
+                   ReturnCommand="{Binding AddTodoCommand}"
+                   Grid.Column="0" />
+            <Button Text="Add"
+                    Command="{Binding AddTodoCommand}" 
+                    Grid.Column="1"
+                    WidthRequest="80"
+                    HeightRequest="50" />
+        </Grid>
+    </Grid>
 </ContentPage>

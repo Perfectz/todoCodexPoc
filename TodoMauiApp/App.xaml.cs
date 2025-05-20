@@ -1,11 +1,17 @@
 using Microsoft.Maui.Controls;
+using TodoMauiApp.Services;
+
 namespace TodoMauiApp;
 
 public partial class App : Application
 {
-    public App()
+    public App(DatabaseService databaseService)
     {
         InitializeComponent();
-        MainPage = new MainPage();
+        
+        // Ensure database is initialized
+        databaseService.Initialize();
+        
+        MainPage = ServiceProvider.GetService<MainPage>();
     }
 }
