@@ -4,6 +4,11 @@
              xmlns:vm="clr-namespace:TaskTracker.Mobile.ViewModels"
              x:Class="TaskTracker.Mobile.Views.MainPage">
     <VerticalStackLayout Padding="20" Spacing="10">
+        <Frame Style="{StaticResource CardStyle}" Padding="10">
+            <Label Text="{Binding OpenTaskCount, StringFormat='Open tasks: {0}'}"
+                   HorizontalOptions="Center"
+                   FontAttributes="Bold" />
+        </Frame>
         <HorizontalStackLayout Spacing="10">
             <Entry Text="{Binding NewTaskText}" Placeholder="New task" HorizontalOptions="FillAndExpand" />
             <Button Text="Add" Command="{Binding AddTaskCommand}" />

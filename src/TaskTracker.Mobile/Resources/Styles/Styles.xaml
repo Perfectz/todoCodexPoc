@@ -24,4 +24,14 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
+    <Style TargetType="TabBar">
+        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryDarker}" />
+        <Setter Property="TitleColor" Value="White" />
+        <Setter Property="UnselectedColor" Value="#90FFFFFF" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="Black" Offset="0,4" Opacity="0.4" Radius="8" />
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

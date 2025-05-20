@@ -2,8 +2,12 @@
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:views="clr-namespace:TaskTracker.Mobile.Views"
-       x:Class="TaskTracker.Mobile.AppShell">
-    <TabBar BackgroundColor="{StaticResource PrimaryDarker}" ForegroundColor="White">
+       x:Class="TaskTracker.Mobile.AppShell"
+       Shell.TabBarBackgroundColor="{StaticResource PrimaryDarker}"
+       Shell.TabBarForegroundColor="{StaticResource AccentBlue}"
+       Shell.TabBarTitleColor="White"
+       Shell.TabBarUnselectedColor="#90FFFFFF">
+    <TabBar>
         <ShellContent Title="Tasks" ContentTemplate="{DataTemplate views:MainPage}" />
         <ShellContent Title="Archive" ContentTemplate="{DataTemplate views:ArchivePage}" />
         <ShellContent Title="Settings">
