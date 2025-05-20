@@ -2,11 +2,16 @@ using Microsoft.Maui.Controls;
 using System.Threading.Tasks;
 using TaskTracker.Mobile.ViewModels;
 using TodoCodexPoc.Models;
+using TaskTracker.Mobile;
 
 namespace TaskTracker.Mobile.Views;
 
 public partial class MainPage : ContentPage
 {
+    public MainPage() : this(ServiceHelper.GetService<MainPageViewModel>())
+    {
+    }
+
     public MainPage(MainPageViewModel viewModel)
     {
         InitializeComponent();
