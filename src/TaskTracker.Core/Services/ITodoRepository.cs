@@ -2,7 +2,7 @@ using TodoCodexPoc.Models;
 
 namespace TodoCodexPoc.Services;
 
-public interface ITodoRepository
+public interface ITodoRepository : IDisposable
 {
     Task<IReadOnlyList<TodoItem>> GetAllAsync(CancellationToken token = default);
     Task<TodoItem?> GetAsync(Guid id, CancellationToken token = default);

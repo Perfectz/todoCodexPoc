@@ -4,11 +4,19 @@ using System.Threading.Tasks;
 using TodoCodexPoc.Models;
 using TodoCodexPoc.Services;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace TaskTracker.Tests;
 
 public class TaskRepositoryTests
 {
+    private readonly ITestOutputHelper _output;
+
+    public TaskRepositoryTests(ITestOutputHelper output)
+    {
+        _output = output;
+    }
+
     [Fact]
     public async Task AddAndRetrieveItem()
     {
@@ -22,11 +30,24 @@ public class TaskRepositoryTests
             Priority = 1
         };
 
+        _output.WriteLine($"Test item ID: {item.Id}");
+
         try
         {
             // Act
             await repo.AddAsync(item);
+            _output.WriteLine("Item added");
+            
+            var items = await repo.GetAllAsync();
+            _output.WriteLine($"Total items: {items.Count}");
+            
+            foreach (var i in items)
+            {
+                _output.WriteLine($"Item in repo: {i.Id} - {i.Title}");
+            }
+            
             var retrieved = await repo.GetAsync(item.Id);
+            _output.WriteLine($"Retrieved item: {retrieved?.Id} - {retrieved?.Title}");
 
             // Assert
             Assert.NotNull(retrieved);
