@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Linq;
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using TodoCodexPoc.Models;
@@ -14,6 +15,13 @@ public class MainPageViewModel : INotifyPropertyChanged
 
     public ObservableCollection<TodoItem> Tasks { get; } = new();
     public ObservableCollection<TodoItem> ArchivedTasks { get; } = new();
+
+    private int _openTaskCount;
+    public int OpenTaskCount
+    {
+        get => _openTaskCount;
+        private set => SetField(ref _openTaskCount, value);
+    }
 
     private string _newTaskText = string.Empty;
     public string NewTaskText
@@ -42,6 +50,11 @@ public class MainPageViewModel : INotifyPropertyChanged
         _ = LoadAsync();
     }
 
+    private void UpdateOpenTaskCount()
+    {
+        OpenTaskCount = Tasks.Count(t => !t.IsDone);
+    }
+
     private async Task OnTasksChanged(object? sender, EventArgs e)
     {
         await LoadAsync();
@@ -61,6 +74,7 @@ public class MainPageViewModel : INotifyPropertyChanged
         {
             ArchivedTasks.Add(item);
         }
+        UpdateOpenTaskCount();
     }
 
     private async Task AddTaskAsync()
@@ -73,6 +87,7 @@ public class MainPageViewModel : INotifyPropertyChanged
         await _repo.AddAsync(item);
         Tasks.Add(item);
         NewTaskText = string.Empty;
+        UpdateOpenTaskCount();
     }
 
     private async Task ToggleDoneAsync(TodoItem? item)
@@ -80,6 +95,7 @@ public class MainPageViewModel : INotifyPropertyChanged
         if (item == null)
             return;
         await _repo.UpdateAsync(item);
+        UpdateOpenTaskCount();
     }
 
     private async Task DeleteTaskAsync(TodoItem? item)
@@ -88,6 +104,7 @@ public class MainPageViewModel : INotifyPropertyChanged
             return;
         await _repo.DeleteAsync(item.Id);
         Tasks.Remove(item);
+        UpdateOpenTaskCount();
     }
 
     private async Task ArchiveTaskAsync(TodoItem? item)
@@ -97,6 +114,7 @@ public class MainPageViewModel : INotifyPropertyChanged
         await _repo.ArchiveAsync(item.Id);
         Tasks.Remove(item);
         ArchivedTasks.Add(item);
+        UpdateOpenTaskCount();
     }
 
     private async Task EditTaskAsync(TodoItem? item)
