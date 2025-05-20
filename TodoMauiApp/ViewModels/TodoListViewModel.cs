@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using TodoMauiApp.Data;
 using TodoMauiApp.Models;
+using Microsoft.Maui.Controls;
 
 namespace TodoMauiApp.ViewModels
 {
@@ -65,7 +66,7 @@ namespace TodoMauiApp.ViewModels
 
         public TodoListViewModel(TodoRepository repository)
         {
-            _repository = repository;
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             
             LoadTodosCommand = new Command(async () => await LoadTodosAsync());
             AddTodoCommand = new Command(async () => await AddTodoAsync(), () => !string.IsNullOrWhiteSpace(NewTodoTitle));
@@ -104,7 +105,10 @@ namespace TodoMauiApp.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error loading todos: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Error", "Failed to load tasks", "OK");
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    await Application.Current?.MainPage?.DisplayAlert("Error", "Failed to load tasks", "OK");
+                });
             }
             finally
             {
@@ -122,17 +126,29 @@ namespace TodoMauiApp.ViewModels
 
             try
             {
-                var newTodo = new TodoItem(0, NewTodoTitle, DateTimeOffset.Now, false, 0);
-                await _repository.AddAsync(newTodo);
+                var title = NewTodoTitle;
+                NewTodoTitle = string.Empty; // Clear the input field immediately for better UX
+
+                var newTodo = new TodoItem(0, title, DateTimeOffset.Now, false, 0);
+                await _repository.AddAsync(newTodo).ConfigureAwait(false);
                 Debug.WriteLine($"Added todo with ID: {newTodo.Id}");
                 
-                NewTodoTitle = string.Empty;
-                await LoadTodosAsync();
+                // Load todos on the UI thread
+                await MainThread.InvokeOnMainThreadAsync(async () => 
+                {
+                    await LoadTodosAsync();
+                });
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error adding todo: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Error", "Failed to add task", "OK");
+                await MainThread.InvokeOnMainThreadAsync(async () => 
+                {
+                    if (Application.Current?.MainPage != null)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Error", $"Failed to add task: {ex.Message}", "OK");
+                    }
+                });
             }
             finally
             {
@@ -140,9 +156,9 @@ namespace TodoMauiApp.ViewModels
             }
         }
 
-        private async Task ToggleTodoAsync(TodoItem item)
+        private async Task ToggleTodoAsync(TodoItem? item)
         {
-            if (IsBusy)
+            if (item == null || IsBusy)
                 return;
 
             IsBusy = true;
@@ -158,7 +174,10 @@ namespace TodoMauiApp.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error toggling todo: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Error", "Failed to update task", "OK");
+                if (Application.Current?.MainPage != null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to update task", "OK");
+                }
             }
             finally
             {
@@ -166,9 +185,9 @@ namespace TodoMauiApp.ViewModels
             }
         }
 
-        private async Task DeleteTodoAsync(TodoItem item)
+        private async Task DeleteTodoAsync(TodoItem? item)
         {
-            if (IsBusy)
+            if (item == null || IsBusy)
                 return;
 
             IsBusy = true;
@@ -183,7 +202,10 @@ namespace TodoMauiApp.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error deleting todo: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Error", "Failed to delete task", "OK");
+                if (Application.Current?.MainPage != null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to delete task", "OK");
+                }
             }
             finally
             {
