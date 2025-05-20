@@ -7,4 +7,5 @@ public class TodoItem
     public DateTimeOffset? DueDate { get; set; }
     public bool IsDone { get; set; }
     public int Priority { get; set; }
+    public bool IsArchived { get; set; }
 }

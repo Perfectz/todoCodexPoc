@@ -11,15 +11,34 @@
         <CollectionView x:Name="TaskList" ItemsSource="{Binding Tasks}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Style="{StaticResource CardStyle}" Padding="12">
-                        <Grid ColumnDefinitions="Auto,*">
-                            <CheckBox IsChecked="{Binding IsDone}" CheckedChanged="OnCheckBoxChanged" />
-                            <VerticalStackLayout Grid.Column="1" Spacing="2">
-                                <Label Text="{Binding Title}" FontFamily="{StaticResource FontTech}" TextColor="White" />
-                                <Label Text="{Binding DueDate, StringFormat='Due {0:g}'}" FontSize="12" TextColor="#90FFFFFF" />
-                            </VerticalStackLayout>
-                        </Grid>
-                    </Frame>
+                    <SwipeView>
+                        <SwipeView.LeftItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Edit" BackgroundColor="{StaticResource AccentBlue}"
+                                           Command="{Binding BindingContext.EditTaskCommand, Source={x:Reference TaskList}}"
+                                           CommandParameter="{Binding .}" />
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Archive" BackgroundColor="{StaticResource PrimaryDark}"
+                                           Command="{Binding BindingContext.ArchiveTaskCommand, Source={x:Reference TaskList}}"
+                                           CommandParameter="{Binding .}" />
+                                <SwipeItem Text="Delete" BackgroundColor="Red"
+                                           Command="{Binding BindingContext.DeleteTaskCommand, Source={x:Reference TaskList}}"
+                                           CommandParameter="{Binding .}" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <Frame Style="{StaticResource CardStyle}" Padding="12">
+                            <Grid ColumnDefinitions="Auto,*">
+                                <CheckBox IsChecked="{Binding IsDone}" CheckedChanged="OnCheckBoxChanged" />
+                                <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                    <Label Text="{Binding Title}" FontFamily="{StaticResource FontTech}" TextColor="White" />
+                                    <Label Text="{Binding DueDate, StringFormat='Due {0:g}'}" FontSize="12" TextColor="#90FFFFFF" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
